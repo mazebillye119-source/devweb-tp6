@@ -9,10 +9,13 @@ import { port, env } from "./config.mjs";
 import { connect, close } from "./database/database.mjs";
 import apiV1 from "./router/api-v1.mjs";
 import favicon from "serve-favicon";
+import apiV2 from "./router/api-v2.mjs";
 
 logger.setLevel(env === "development" ? logger.levels.DEBUG : logger.levels.INFO);
 
 const app = express();
+app.set("view engine", "ejs");
+app.set("views", "views");
 
 if (env === "development") app.use(morgan("dev"));
 
@@ -32,10 +35,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpec));
 
 
 app.use("/api-v1", apiV1);
-
-app.get("/:url", (request, response, next) => {
-    return next(createError(501, "Not Implemented"));
-});
+app.use("/api-v2", apiV2);
 
 app.use((request, response, next) => {
     return next(createError(404));

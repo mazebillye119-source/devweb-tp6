@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Réducteur d'URL</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 640px;
+            margin: 2rem auto;
+            padding: 1rem;
+            color: #222;
+        }
+        h1 { margin-bottom: 1rem; }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        input, button {
+            padding: 0.6rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #06c;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover { background: #05a; }
+        .result {
+            background: #eef;
+            border-left: 4px solid #06c;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            word-break: break-all;
+        }
+        .error {
+            background: #fee;
+            border-left-color: #900;
+            color: #900;
+        }
+        a { color: #06c; }
+        .count { color: #666; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <h1>Réducteur d'URL</h1>
+
+    <% if (typeof error !== "undefined" && error) { %>
+        <div class="result error"><%= error %></div>
+    <% } %>
+
+    <% if (typeof link !== "undefined" && link) { %>
+        <div class="result">
+            <p>Votre lien court :</p>
+            <p>
+                <a href="<%= origin %>/api-v2/<%= link %>">
+                    <%= origin %>/api-v2/<%= link %>
+                </a>
+            </p>
+        </div>
+    <% } %>
+
+    <p class="count"><%= count %> lien(s) créé(s) sur ce serveur.</p>
+
+    <form method="post" action="/api-v2/" id="submit-link">
+        <label for="url">URL à raccourcir</label>
+        <input
+            name="url"
+            id="url"
+            type="url"
+            placeholder="https://perdu.com"
+            required
+        />
+        <button type="submit">Réduire</button>
+    </form>
+</body>
+</html>
