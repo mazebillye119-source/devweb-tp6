@@ -30,9 +30,14 @@ app.use((request, response, next) => {
   next();
 });
 
+app.use(express.static("static"));
+
 const openapiSpec = YAML.parse(fs.readFileSync("static/open-api.yaml", "utf8"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpec));
 
+app.get("/", (request, response) => {
+    response.redirect("/client.html");
+});
 
 app.use("/api-v1", apiV1);
 app.use("/api-v2", apiV2);

@@ -2,7 +2,8 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8" />
-        <title>Réducteur d'URL</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Réducteur d'URL - Client</title>
         <style>
             body {
                 font-family: system-ui, sans-serif;
@@ -45,33 +46,30 @@
                 color: #900;
             }
             a { color: #06c; }
-            .count { color: #666; font-size: 0.9rem; }
+            .copy-btn {
+                margin-left: 0.5rem;
+                background: #080;
+            }
+            .copy-btn:hover { background: #060; }
         </style>
     </head>
     <body>
         <h1>Réducteur d'URL</h1>
 
-        <% if (typeof error !== "undefined" && error) { %>
-            <div class="result error"><%= error %></div>
-        <% } %>
+        <div id="result" hidden></div>
 
-        <% if (typeof link !== "undefined" && link) { %>
-            <div class="result">
-                <p>Votre lien court :</p>
-                <p>
-                    <a href="<%= origin %>/api-v2/<%= link %>">
-                        <%= origin %>/api-v2/<%= link %>
-                    </a>
-                </p>
-            </div>
-        <% } %>
-
-        <p class="count"><%= count %> lien(s) créé(s) sur ce serveur.</p>
-
-        <form method="post" action="/api-v2/" id="submit-link">
+        <form id="shorten-form">
             <label for="url">Type the URL to shorten</label>
-            <input name="url" id="url" type="url" placeholder="https://perdu.com" />
+            <input
+                name="url"
+                id="url"
+                type="url"
+                placeholder="https://perdu.com"
+                required
+            />
             <button type="submit">Submit</button>
         </form>
+
+        <script src="/app.js"></script>
     </body>
 </html>
