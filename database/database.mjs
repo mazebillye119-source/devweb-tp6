@@ -36,8 +36,10 @@ export function getStatus(link) {
         .get(link);
 }
 
-export function createLink(url, link) {
-    connect().prepare("INSERT INTO links (url, link) VALUES (?, ?)").run(url, link);
+export function createLink(url, link, secret) {
+    connect()
+        .prepare("INSERT INTO links (url, link, secret) VALUES (?, ?, ?)")
+        .run(url, link, secret);
     return { url, link };
 }
 
@@ -47,4 +49,17 @@ export function incrementVisits(link) {
 
 export function countLinks() {
     return connect().prepare("SELECT COUNT(*) AS count FROM links").get().count;
+}
+
+export function getSecret(link) {
+    const row = connect()
+        .prepare("SELECT secret FROM links WHERE link = ?")
+        .get(link);
+    return row?.secret;
+}
+
+export function deleteLink(link) {
+    return connect()
+        .prepare("DELETE FROM links WHERE link = ?")
+        .run(link);
 }

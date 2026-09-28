@@ -1,13 +1,24 @@
 openapi: 3.0.0
 info:
   title: URL Shortener API
-  version: 1.0.0
+  version: 2.0.0
 servers:
   - url: http://localhost:8080/api-v1
+    description: API v1
+  - url: http://localhost:8080/api-v2
+    description: API v2
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+
 paths:
   /:
     get:
-      summary: Get link count
+      summary: Get link count (JSON) ou page d'accueil (HTML)
       responses:
         '200':
           description: OK
@@ -17,6 +28,8 @@ paths:
                 type: object
                 properties:
                   count: { type: integer }
+            text/html:
+              schema: { type: string }
     post:
       summary: Create a short link
       requestBody:
@@ -37,5 +50,68 @@ paths:
                 properties:
                   url: { type: string }
                   link: { type: string }
+                  secret: { type: string }
         '400':
           description: Invalid URL
+  /{url}:
+    get:
+      summary: Get status (JSON) ou redirection (HTML)
+      parameters:
+        - in: path
+          name: url
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Link info (JSON)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url: { type: string }
+                  link: { type: string }
+                  visits: { type: integer }
+                  created_at: { type: string }
+        '301':
+          description: Redirect (HTML)
+        '404':
+          description: Not found
+    delete:
+      summary: Delete a short link
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: url
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deleted
+        '401':
+          description: X-API-KEY required
+        '403':
+          description: Invalid X-API-KEY
+        '404':
+          description: Not found
+  /error:
+    get:
+      summary: Test 500 error
+      responses:
+        '500':
+          description: Server error
+  /status/{url}:
+    get:
+      summary: Get link status (API v1 seulement)
+      parameters:
+        - in: path
+          name: url
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK

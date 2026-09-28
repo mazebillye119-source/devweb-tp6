@@ -18,10 +18,13 @@
     });
     
 ### Trouver un middleware Express qui permet de répondre aux requêtes favicon.ico avec static/logo_univ_16.png. Donner le code.
-
+    import favicon from "serve-favicon";
+    app.use(favicon("static/logo_univ_16.png"));
 
 ### Donner les liens vers la documentation du driver SQLite utilisé dans l’application.
-
+    Le driver utilisé est "better-sqlite3" :
+    - https://github.com/WiseLibs/better-sqlite3
+    - https://github.com/WiseLibs/better-sqlite3/blob/master/docs/api.md
 
 ### Indiquer à quels moments la connexion à la base de données est ouverte est quand elle est fermée.
 
